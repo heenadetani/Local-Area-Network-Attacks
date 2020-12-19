@@ -29,8 +29,6 @@ def cmd():
     print(Style.RESET_ALL)
 
 
-
-
 if __name__ == "__main__":
     """
     HEADER
@@ -191,8 +189,8 @@ if __name__ == "__main__":
 
 
     #----------------Mac Changer---------------------    
+    
     elif n==6:
-
         interface = input("[+] Enter the interface to change the mac address ---> ")
         new_mac = input("[+] Enter the new MAC address ---> ")
         #function which change the mac address
