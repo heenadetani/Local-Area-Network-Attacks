@@ -24,7 +24,7 @@ nslookup (or 'host')
 How to use?
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Download the script
- $ wget https://raw.githubusercontent.com/GinjaChris/pentmenu/master/LAN-Attacks
+ $ wget https://github.com/heenadetani/Local-Area-Network-Attacks.git
 
 Make it executable
  $ chmod +x ./LAN-attacks
